@@ -1,0 +1,55 @@
+{
+  "name": "cheos-bot",
+  "description": "A very,very simple Neos VR Chat Bot Library.",
+  "author": "ProbablePrime <prime@ahref.co.uk>",
+  "license": "MIT",
+  "version": "0.1.0",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "scripts": {
+    "build:ts": "rimraf lib dist && tsc",
+    "build": "npm run build:ts",
+    "test": "mocha --compilers ts:ts-node/register \"src/**/*.spec.ts\"",
+    "prepublish": "npm run build",
+    "lint": "tslint --fix -c tslint.json --project tsconfig.json \"src/**/*.ts\" \"test/**/*.ts\"",
+    "docs": "typedoc --out docs/ --mode file --excludeNotExported -tsconfig tsconfig.json --target ES6",
+    "fmt": "prettier --write **/*.ts",
+    "deps:update": "ncu -u"
+  },
+  "engineStrict": true,
+  "engines": {
+    "node": ">= 14.0.0"
+  },
+  "private": true,
+  "devDependencies": {
+    "@types/chai": "^4.2.16",
+    "@types/mocha": "^8.2.2",
+    "@types/node": "^14.14.41",
+    "@types/node-fetch": "^2.5.10",
+    "@types/sinon": "^10.0.0",
+    "@types/sinon-chai": "^3.2.5",
+    "@types/superagent": "^4.1.10",
+    "chai": "^4.3.4",
+    "mocha": "^8.3.2",
+    "npm-check-updates": "^11.5.0",
+    "prettier": "^2.2.1",
+    "rimraf": "^3.0.2",
+    "sinon": "^10.0.0",
+    "sinon-chai": "^3.6.0",
+    "ts-node": "^9.1.1",
+    "tslint": "^6.1.3",
+    "tslint-microsoft-contrib": "^6.2.0",
+    "typedoc": "^0.20.35",
+    "typescript": "^4.2.4"
+  },
+  "prettier": {
+    "parser": "typescript",
+    "tabWidth": 4,
+    "singleQuote": true,
+    "trailingComma": "all"
+  },
+  "dependencies": {
+    "strong-events": "^1.0.7",
+    "superagent": "^6.1.0"
+  }
+}
