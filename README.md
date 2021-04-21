@@ -1,6 +1,6 @@
 # cheos-bot Library
 
-**This is a very, early pre-release, stuff may break and you may scratch your head.**
+**This is a very, early pre-release, stuff may break and you may scratch your head. DON'T USE IT YET!!!**
 
 A very small, subset of Neos' HTTP APIs, which are enough to make a small Neos Bot. It can't really do much right now. But It can do what I need it to do. If you'd like to suggest features please let me know by opening an issue.
 
