@@ -79,9 +79,7 @@ export class MessageManager extends CloudModuleManager {
 			const res = await this.agent()
 				.query(params)
 				.get(this.getReceivePath());
-			if (res.status === 200) {
-				this.lastReadTime = new Date();
-			}
+
 			const newMessages = this.transformBody(res.body);
 
 			// This avoid inline ternaries, where I can
