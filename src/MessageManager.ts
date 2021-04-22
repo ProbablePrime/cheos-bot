@@ -95,7 +95,7 @@ export class MessageManager extends CloudModuleManager {
 			this.lastReadTime = lastMessageDate;
 		} catch (e) {
 			// So as this runs in a loop, we'll just need to back this off I guess?
-			// Connor's library can probably help here. For now we'll just do this.
+			// https://github.com/connor4312/cockatiel maybe?
 			this.onError.invoke(e);
 		}
 	}

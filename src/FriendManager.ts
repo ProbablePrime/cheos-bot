@@ -94,6 +94,7 @@ export class FriendManager extends CloudModuleManager {
 			this.lastStatusUpdate = statusDate;
 			this.onFriendsUpdate.invoke(Array.from(this.friends.values()));
 		} catch (e) {
+			// https://github.com/connor4312/cockatiel maybe?
 			this.onError(e);
 		}
 	}
