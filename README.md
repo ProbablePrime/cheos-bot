@@ -4,6 +4,7 @@
 
 A very small, subset of Neos' HTTP APIs, which are enough to make a small Neos Bot. It can't really do much right now. But It can do what I need it to do. If you'd like to suggest features please let me know by opening an issue.
 
+**Disclaimer**: cheos-bot is not officially sanctioned or affiliated with Neos, its team or Solirax.
 
 ## Usage
 
@@ -47,7 +48,7 @@ TODO
 
 ## Notes
 
-Things might seem a little weird here, that's because it is. This is a very **early** look at a how I would write this kind of module and I'm still figuring stuff out.
+Things might seem a little weird here, that's because it is. This is a very **early** look at a working on this. Neos is new and changing and a lot of stuff is subject to change both here and in Neos. So please provide feedback in the issues section.
 
 ## Design Principles
 
