@@ -176,7 +176,7 @@ export class MessageManager extends CloudModuleManager {
 			ownerId: userId,
 			sendTime: messageDate,
 			lastUpdateTime: messageDate,
-			readTime: messageDate,
+			readTime: undefined,
 			content: undefined,
 			recipientId: to,
 			messageType: type
