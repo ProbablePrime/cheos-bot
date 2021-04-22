@@ -14,6 +14,25 @@ export enum MessageType {
 	SugarCubes = 'SugarCubes'
 }
 
+export enum TokenType {
+	KFC = 'KFC',
+	NCR = 'NCR'
+}
+export enum TransactionType {
+	User2User = 'User2User',
+	Withdrawal = 'Withdrawal',
+	Deposit = 'Deposit',
+	Tip = 'Tip'
+}
+
+export type NeosCreditTransfer = {
+	token: TokenType;
+	recipientId: string;
+	amount: number;
+	comment: string;
+	transactionType: TransactionType
+}
+
 export type NeosMessage<T> = {
 	id: string;
 	ownerId: string;
@@ -21,9 +40,10 @@ export type NeosMessage<T> = {
 	senderId: string;
 	messageType: MessageType;
 	content: T;
+
 	sendTime: Date;
 	lastUpdateTime: Date;
-	readTime: Date;
+	readTime: Date | undefined;
 };
 
 export type NeosObject = {

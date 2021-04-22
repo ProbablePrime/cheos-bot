@@ -1,4 +1,3 @@
-//import {MessageManager} from './MessageManager';
 import { createSignal } from 'strong-events/lib';
 import { FriendManager } from './FriendManager';
 import { MessageManager } from './MessageManager';
@@ -22,7 +21,7 @@ const defaultNeosBotOptions = {
 	autoUpdate: true
 };
 
-export class NeosBot {
+export class Bot {
 	public onError = createSignal<SignalEvent<Error>>();
 	private readonly credentials = new NeosUserCredentials();
 	public friends = new FriendManager(this.credentials, this.options);
