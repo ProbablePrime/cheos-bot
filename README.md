@@ -18,7 +18,7 @@ npm i --save @probableprime/cheos-bot
 
 ```javascript
 
-const {NeosBot} = require('@probableprime/cheos-bot');
+const {Bot} = require('@probableprime/cheos-bot');
 
 const bot = new NeosBot();
 

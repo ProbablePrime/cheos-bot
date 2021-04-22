@@ -1,5 +1,5 @@
 
-const {NeosBot} = require('./');
+const {Bot} = require('./');
 
 const bot = new NeosBot();
 
