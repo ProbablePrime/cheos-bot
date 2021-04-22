@@ -58,14 +58,14 @@ I have some random design principles at play here:
 1. Newest JavaScript / Node features. We're in 2021. We use classes, maps, async/await and whatever else.
 1. Segregated Functionality, Avoiding a [God Object](https://en.wikipedia.org/wiki/God_object) Lets me Write Faster
    1. Yeah I know NeosBot is a god Object, but its just wrapped for simplicity. It doesn't actually make any requests.
-1. Signals vs Event Emitters see [Events](docs/events.md) for more info. I'm still not sure about this one.
+1. Signals vs Event Emitters see [Events](pages/events.md) for more info. I'm still not sure about this one.
 1. Make it easy. No one has time for this
 
 ## Known Issues
 
 - Error Handling is terrible... Like really bad... Half the time I don't even handle them.
 - Failure states, retries and cascade failures can happen
-- See [Events](docs/events.md)
+- See [Events](pages/events.md)
 - No Tests
 - No Docs
 - Incomplete (V0.1.0) means basically nothing in the grand scheme of things
