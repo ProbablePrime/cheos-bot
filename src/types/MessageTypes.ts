@@ -33,12 +33,13 @@ export type NeosCreditTransfer = {
 	transactionType: TransactionType
 }
 
-export type NeosMessage<T> = {
+export type NeosMessageGeneric<T> = {
 	id: string;
 	ownerId: string;
 	recipientId: string;
 	senderId: string;
 	messageType: MessageType;
+
 	content: T;
 
 	sendTime: Date;
@@ -46,6 +47,11 @@ export type NeosMessage<T> = {
 	readTime: Date | undefined;
 };
 
+export type NeosSound = {};
+export type NeosSessionInvite = {};
+export type NeosSugarCubes = {};
+
+export type NeosManifest = {hash:string, bytes:number}[];
 export type NeosObject = {
 	id: string;
 	ownerId: string;
@@ -66,14 +72,26 @@ export type NeosObject = {
 	lastModificationTime: Date;
 	creationTime: Date;
 	firstPublishTime: Date;
+	neosDDmanifest: NeosManifest;
 	// This is incomplete but the rest of the stuff isn't useful
 };
 
-export type TextMessage = NeosMessage<string> & {
-	messageType: MessageType.Text;
-};
-export type ObjectMessage = NeosMessage<NeosObject> & {
-	messageType: MessageType.Object;
-};
+export type TextMessage = NeosMessageGeneric<string> & {messageType: MessageType.Text};
+export type ObjectMessage = NeosMessageGeneric<NeosObject> & {messageType: MessageType.Object};
+export type SoundMessage = NeosMessageGeneric<NeosSound> & {messageType: MessageType.Sound};
+export type SessionMessage = NeosMessageGeneric<NeosSessionInvite> & {messageType: MessageType.SessionInvite};
+export type CreditTransferMessage = NeosMessageGeneric<NeosCreditTransfer> & {messageType: MessageType.CreditTransfer};
+export type SugarCubesMessage = NeosMessageGeneric<NeosSugarCubes> & {messageType: MessageType.SugarCubes};
 
-export type UnknownMessage = NeosMessage<any>;
+export type SendableTextMessage = Pick<TextMessage, 'messageType' | 'content'>;
+export type SendableObjectMessage = Pick<ObjectMessage, 'messageType' | 'content'>;
+export type SendableSoundMessage = Pick<SoundMessage, 'messageType' | 'content'>;
+export type SendableSessionMessage = Pick<SessionMessage, 'messageType' | 'content'>;
+export type SendableCreditTransferMessage = Pick<CreditTransferMessage, 'messageType' | 'content'>;
+export type SendableSugarCubesMessage = Pick<SugarCubesMessage, 'messageType' | 'content'>;
+
+export type SendableMessage = SendableTextMessage | SendableObjectMessage | SendableSoundMessage | SendableSessionMessage | SendableCreditTransferMessage | SendableSugarCubesMessage;
+
+export type UnknownMessage = NeosMessageGeneric<any>;
+
+export type NeosMessage = TextMessage | ObjectMessage | SoundMessage | SessionMessage | CreditTransferMessage | SugarCubesMessage;

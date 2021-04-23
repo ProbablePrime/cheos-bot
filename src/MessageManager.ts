@@ -9,6 +9,7 @@ import {
 	NeosMessage,
 	NeosMessageRequestParams,
 	NeosObject,
+	SendableMessage,
 	TokenType,
 	TransactionType,
 	UnknownMessage
@@ -16,7 +17,7 @@ import {
 
 import {v4 as uuidv4} from 'uuid';
 
-export type MessageListEvent = (message: NeosMessage<any>[]) => any;
+export type MessageListEvent = (message: NeosMessage[]) => any;
 
 export type MessageManagerOptions = {
 	autoMarkRead: boolean;
@@ -32,14 +33,11 @@ function isValidDate(d: Date) {
 
 export class MessageManager extends CloudModuleManager {
 
-	public onNewMessage = createSignal<SignalEvent<UnknownMessage>>();
+	public onNewMessage = createSignal<SignalEvent<NeosMessage>>();
 	public onMessageRead = createSignal<SignalEvent<string>>();
 
 	private lastReadTime?: Date;
-	private readonly messages: Readonly<Map<string, NeosMessage<any>>> = new Map<
-		string,
-		NeosMessage<any>
-	>();
+	private readonly messages: Readonly<Map<string, NeosMessage>> = new Map<string,NeosMessage>();
 
 	constructor(
 		credentials: NeosUserCredentials,
@@ -52,17 +50,20 @@ export class MessageManager extends CloudModuleManager {
 		this.messages.clear();
 	}
 
-	public isMessageRead(message: NeosMessage<any>): boolean {
+	public isMessageRead(message: NeosMessage): boolean {
+		if (message.messageType === MessageType.Object) {
+			message.content;
+		}
 		if (!message.readTime) {
 			return false;
 		}
 		return isValidDate(message.readTime);
 	}
-	public isMessageSent(message: NeosMessage<any>): boolean {
+	public isMessageSent(message: NeosMessage): boolean {
 		return message.senderId === message.ownerId;
 	}
 
-	public isMessageReceived(message: NeosMessage<any>): boolean {
+	public isMessageReceived(message: NeosMessage): boolean {
 		return message.recipientId === message.ownerId;
 	}
 
@@ -131,11 +132,17 @@ export class MessageManager extends CloudModuleManager {
 	}
 
 	public async sendTextMessage(to: string, content: string) {
-		return this.sendMessage<string>(to, MessageType.Text, content);
+		return this.sendMessage(to, {
+			messageType: MessageType.Text,
+			content
+		});
 	}
 
 	public async sendObject(to: string, obj: NeosObject) {
-		return this.sendMessage<NeosObject>(to, MessageType.Object, obj);
+		return this.sendMessage(to, {
+			messageType: MessageType.Object,
+			content: obj
+		});
 	}
 
 	public sendNCR(to: string, amount: number, comment: string = '') {
@@ -147,14 +154,17 @@ export class MessageManager extends CloudModuleManager {
 	}
 
 	public async sendTransaction(to: string, token: TokenType, amount: number, comment: string) {
-		const transfer:NeosCreditTransfer = {
+		const content:NeosCreditTransfer = {
 			token,
 			amount,
 			comment,
 			recipientId: to,
 			transactionType: TransactionType.User2User
 		}
-		return this.sendMessage<NeosCreditTransfer>(to, MessageType.CreditTransfer, transfer);
+		return this.sendMessage(to, {
+			messageType:MessageType.CreditTransfer,
+			content,
+		});
 	}
 
 	private convertContent(content: any, type: MessageType): string {
@@ -163,23 +173,22 @@ export class MessageManager extends CloudModuleManager {
 		}
 		return JSON.stringify(content);
 	}
-	// I'll re-write this I promise
-	private async sendMessage<T>(to: string, type: MessageType, content: T): Promise<NeosMessage<T>> {
+
+	private async sendMessage(to: string, params: SendableMessage): Promise<NeosMessage> {
 		const userId = this.getUserId();
 		const messageDate = new Date();
 
-		const message:NeosMessage<any> = {
+		const message: UnknownMessage = {
 			id: 'MSG-' + uuidv4(),
 			senderId: userId,
 			ownerId: userId,
 			sendTime: messageDate,
 			lastUpdateTime: messageDate,
 			readTime: undefined,
-			content: undefined,
 			recipientId: to,
-			messageType: type
+			messageType: params.messageType,
+			content: this.convertContent(params.content, params.messageType)
 		};
-		message.content = this.convertContent(content, type);
 
 		const res = await this.agent()
 			.post(this.getSendPath(message.recipientId))
@@ -196,8 +205,8 @@ export class MessageManager extends CloudModuleManager {
 		return super.path('users', userId, 'messages');
 	}
 
-	private transformBody(messages: NeosMessage<any>[]): NeosMessage<any>[] {
-		return messages.map<NeosMessage<any>>((message) => {
+	private transformBody(messages: UnknownMessage[]): NeosMessage[] {
+		return messages.map<UnknownMessage>((message) => {
 			message.lastUpdateTime = new Date(message.lastUpdateTime);
 			message.sendTime = new Date(message.sendTime);
 			if (message.readTime) {
@@ -205,7 +214,7 @@ export class MessageManager extends CloudModuleManager {
 			}
 
 			if (message.messageType !== MessageType.Text) {
-				message.content = JSON.parse(message.content);
+				message.content = JSON.parse(<any> message.content);
 			}
 
 			return message;
